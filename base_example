@@ -1,0 +1,51 @@
+VAR
+  sinalC,sinalV,stopC,stopV : booleano;
+  cor                       : inteiro;
+
+  
+  // VARIAVEIS DA ESTRATÉGIA
+  // coloca aqui as variaveis necessarias <<----------
+INPUT
+  
+BEGIN
+  //PASSO 1 | CARREGAR INDICADOR
+  //  colocar aqui os indicadores necessarios <<----------
+  
+  //PASSO 2 | SINAIS DE ENTRADA
+  //sinalC := ; // colocar aqui a configuracao do sinal de entrada de compra
+  //sinalV := ; // colocar aqui a configuracao do sinal de entrada de venda
+  
+  //PASSO 3 | SINAIS DE SAIDA
+  //stopC := ; // colocar aqui a configuração do sinal de saida de compra
+  //stopV := ; // colocar aqui a configuraçaõ do sinal de saida de venda
+
+  
+  //=================== NAO MUDAR ABAIXO DESTA LINHA ==========
+  //EXECUCAO DE ENTRADA
+  se (sinalC) e ( not IsBought) e ( not IsSold) entao
+    BuyAtMarket;
+  se (sinalV) e ( not isBought) e ( not isSold) entao
+    SellShortAtMarket;
+
+    
+  //EXECUCAO DE SAIDA
+  se (IsBought) e (stopC) entao
+    SellToCoverAtMarket;
+  se (IsSold) e (stopV) entao
+    BuyToConverAtMarket;
+
+    
+  //COLORAÇÃO
+  se sinalC entao
+    cor := clLime
+  senao se sinalV entao
+    cor := clRed
+  senao 
+    cor := clOrange;
+  se (cor[1] = clLime) e ( not stopC) entao
+    cor := clLime;
+  se (cor[1] = clRed) e ( not stopV) entao
+    cor := clRed;
+  PaintBar(cor);
+  
+END;
