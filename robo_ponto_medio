@@ -1,0 +1,45 @@
+VAR
+  Mediaa,Dif,AlvoC,AlvoV,StopC,StopV : Real;
+  // VARIAVEIS DE ENTRADA DA ESTRATÉGIA
+  // coloca aqui as variaveis necessarias <<----------
+  //INPUT
+
+
+BEGIN
+  //PASSO 1 | CARREGAR INDICADOR
+  //  colocar aqui os indicadores necessarios <<----------
+  Mediaa := (Maxima + Minima) / 2;
+  Plot(Mediaa);
+  //se entrou na compra, cria o alvo
+  Se (Isbought) entao
+    inicio
+      // Alvo da compra
+      AlvoC := (BuyPrice + Dif);
+      SellToCoverLimit(AlvoC);
+      //Stop da compra
+      StopC := (Minima[1] - 5);
+    fim;
+  Se (IsSold) entao
+    Inicio
+      // alvo da venda
+      AlvoV := (SellPrice - Dif);
+      BuyToCoverLimit(AlvoV);
+      // Stop da Venda
+      StopV := (Maxima[1] + 5);
+      BuyToCoverStop(StopV);
+    fim;
+  //se entrou na compra, cria o alvo
+  Se (BuyPosition = 0) e (SellPosition = 0) entao
+    Inicio
+      Se (Fechamento > Fechamento[1]) e (Fechamento > MediaExp(9,fechamento)) entao
+        Inicio
+          BuyLimit(Mediaa,1);
+          Dif := (Maxima[1] - Minima[1]);
+        Fim;
+      Se (Fechamento < Fechamento[1]) e (Fechamento < MediaExp(9,fechamento)) entao
+        Inicio
+          SellShortLimit(Mediaa,1);
+          Dif := (Maxima[1] - Minima[1]);
+        Fim;
+    Fim;
+END;
